@@ -1,0 +1,9 @@
+.vscode
+src/__pycache__
+bin
+include
+lib
+local
+share
+web
+json
