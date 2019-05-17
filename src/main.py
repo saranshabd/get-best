@@ -1,7 +1,8 @@
 import os
-from web_scrapers import flipkart, amazon_in, snapdeal, ebay
+from web_scrapers import flipkart, amazon_in, snapdeal
 import time
 from threading import Thread
+from sort import sort
 
 # global contants
 
@@ -25,6 +26,13 @@ def main():
 
     # get user input to search an item
     search_element = input('enter element to search: ')
+    try:
+        order_choice = int(
+            input('1. price: low to high\n2. price: high to low\n-> ')
+        )
+    except ValueError:
+        print('enter a number next time')
+        exit()
 
     # make searched item into URL string
     search_element = make_searchable(search_element)
@@ -36,8 +44,6 @@ def main():
         search_element, max_product_count))
     snapdeal_thread = Thread(target=snapdeal.get, args=(
         search_element, max_product_count))
-    ebay_thread = Thread(target=ebay.get, args=(
-        search_element, max_product_count))
 
     start_time = time.time()
 
@@ -45,17 +51,22 @@ def main():
     flipkart_thread.start()
     amazon_in_thread.start()
     snapdeal_thread.start()
-    ebay_thread.start()
 
     # wait for the threads to end
     flipkart_thread.join()
     amazon_in_thread.join()
     snapdeal_thread.join()
-    ebay_thread.join()
 
     end_time = time.time()
 
     print(str(end_time - start_time) + ' seconds')
+
+    if 1 == order_choice:
+        sort.price_ascending()
+    elif 2 == order_choice:
+        sort.price_descending()
+    else:
+        print('choose wisely next time.')
 
 
 if __name__ == "__main__":

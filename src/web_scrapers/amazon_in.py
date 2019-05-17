@@ -64,6 +64,8 @@ def get(search_element, max_product_count):
     products = soup.find_all('li', class_='s-result-item celwidget', limit=1)
     if 0 == len(products):
         print('empty result set from amazon.in')
+        with open('json/amazon_in.json', 'w') as file:
+            json.dump([], file)
         exit()
 
     # create threads to search for each attribute in parallel

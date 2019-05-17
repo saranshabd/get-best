@@ -24,7 +24,7 @@ def proxy_request(url):
         try:
             proxy = get_proxy()
             print('get proxy')
-            response = requests.get(url, proxies=proxy, timeout=5)
+            response = requests.get(url, proxies=proxy, timeout=3)
             print('confirm proxy: ' + str(proxy['https']))
             break
         except:

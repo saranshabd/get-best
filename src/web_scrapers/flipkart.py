@@ -61,6 +61,8 @@ def get(search_element, max_product_count):
     # check for empty response
     if 0 == len(products):
         print('empty result set from flipkart.com')
+        with open('json/flipkart.json', 'w') as file:
+            json.dump([], file)
         exit()
 
     # create threads to search for each attribute in parallel

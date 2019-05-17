@@ -38,8 +38,8 @@ def get_price(soup, max_product_count):
     products = soup.find_all(
         'div', class_='lfloat marR10', limit=max_product_count)
     for product in products:
-        product_price.append(product.find(
-            'span', class_='lfloat product-price')['display-price'])
+        product_price.append(int(product.find(
+            'span', class_='lfloat product-price')['display-price']))
 
 
 # main function
@@ -58,6 +58,8 @@ def get(search_element, max_product_count):
     # check for empty result set
     if 0 == len(products):
         print('empty result set from snapdeal.com')
+        with open('json/snapdeal.json', 'w') as file:
+            json.dump([], file)
         exit()
 
     # create threads to search for each attribute in parallel
