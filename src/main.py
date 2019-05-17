@@ -1,8 +1,7 @@
 import os
-import flipkart
-import amazon_in
-import snapdeal
-import ebay
+from web_scrapers import flipkart, amazon_in, snapdeal, ebay
+import time
+from threading import Thread
 
 # global contants
 
@@ -30,11 +29,33 @@ def main():
     # make searched item into URL string
     search_element = make_searchable(search_element)
 
+    # create threads to search each web page parallely
+    flipkart_thread = Thread(target=flipkart.get, args=(
+        search_element, max_product_count))
+    amazon_in_thread = Thread(target=amazon_in.get, args=(
+        search_element, max_product_count))
+    snapdeal_thread = Thread(target=snapdeal.get, args=(
+        search_element, max_product_count))
+    ebay_thread = Thread(target=ebay.get, args=(
+        search_element, max_product_count))
+
+    start_time = time.time()
+
     # search the element
-    flipkart.get(search_element, max_product_count)
-    amazon_in.get(search_element, max_product_count)
-    snapdeal.get(search_element, max_product_count)
-    ebay.get(search_element, max_product_count)
+    flipkart_thread.start()
+    amazon_in_thread.start()
+    snapdeal_thread.start()
+    ebay_thread.start()
+
+    # wait for the threads to end
+    flipkart_thread.join()
+    amazon_in_thread.join()
+    snapdeal_thread.join()
+    ebay_thread.join()
+
+    end_time = time.time()
+
+    print(str(end_time - start_time) + ' seconds')
 
 
 if __name__ == "__main__":

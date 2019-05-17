@@ -1,5 +1,7 @@
 .vscode
 src/__pycache__
+src/web_scrapers/__pycache__
+src/proxy/__pycache__
 bin
 include
 lib
