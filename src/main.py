@@ -1,5 +1,6 @@
 import flipkart
 import amazon_in
+import snapdeal
 import os
 
 
@@ -14,8 +15,9 @@ def make_searchable(search_element):
 
 def main():
 
-    # create 'json' folder to store results
-    os.makedirs('json')
+    # create 'json' folder to store results, if does not exists already
+    if False == os.path.isdir('json'):
+        os.makedirs('json')
 
     # get user input to search an item
     search_element = input('enter element to search: ')
@@ -26,6 +28,7 @@ def main():
     # search the element
     flipkart.get(search_element)
     amazon_in.get(search_element)
+    snapdeal.get(search_element)
 
 
 if __name__ == "__main__":
