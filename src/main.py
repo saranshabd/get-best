@@ -1,7 +1,12 @@
+import os
 import flipkart
 import amazon_in
 import snapdeal
-import os
+import ebay
+
+# global contants
+
+max_product_count = 5
 
 
 # helper functions
@@ -26,9 +31,10 @@ def main():
     search_element = make_searchable(search_element)
 
     # search the element
-    flipkart.get(search_element)
-    amazon_in.get(search_element)
-    snapdeal.get(search_element)
+    flipkart.get(search_element, max_product_count)
+    amazon_in.get(search_element, max_product_count)
+    snapdeal.get(search_element, max_product_count)
+    ebay.get(search_element, max_product_count)
 
 
 if __name__ == "__main__":

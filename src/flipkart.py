@@ -12,7 +12,7 @@ def extract_num(price):
 
 # main function
 
-def get(search_element):
+def get(search_element, max_product_count):
 
     # request web page and parse it
     url = 'https://www.flipkart.com/search?q=' + search_element
@@ -25,14 +25,18 @@ def get(search_element):
     product_link = []
 
     # get all product details
+
     products = soup.find_all('div', class_='_3liAhj _1R0K0g')
 
     # check for empty response
     if 0 == len(products):
-        print('empty result set from flipkart')
+        print('empty result set from flipkart.com')
         exit()
 
+    count = max_product_count
     for product in products:
+        if 0 == count:
+            break
         # product image
         product_images.append(product.find('img')['src'])
         # product name
@@ -43,6 +47,7 @@ def get(search_element):
         # product link
         link = product.find('a')
         product_link.append('https://www.flipkart.com' + link['href'])
+        count -= 1
 
     # create array storing dictionaries containing all product details
     product_arr = []

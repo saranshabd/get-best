@@ -12,7 +12,7 @@ def extract_num(price):
 
 # main function
 
-def get(search_element):
+def get(search_element, max_product_count):
 
     # request for webpage and parse it
     url = 'https://www.amazon.in/s?k=' + search_element
@@ -34,23 +34,35 @@ def get(search_element):
     # get all products and their details
 
     products = soup.find_all("div", class_='a-row a-spacing-small')
+    count = max_product_count
     for product in products:
+        if 0 == count:
+            break
         # product names
         product_names.append(str(product.find('h2').get_text()).strip())
         # product links
         product_links.append(product.find('a')['href'])
+        count -= 1
 
     # product images
     products = soup.find_all('div', class_='a-column a-span12 a-text-center')
+    count = max_product_count
     for product in products:
+        if 0 == count:
+            break
         product_images.append(product.find('img')['src'])
+        count -= 1
 
     # product prices
     products = soup.find_all('div', class_='a-column a-span7')
+    count = max_product_count
     for product in products:
+        if 0 == count:
+            break
         temp_result = product.find(
             'span', class_='a-size-base a-color-price s-price a-text-bold')
         product_prices.append(extract_num(temp_result.get_text()))
+        count -= 1
 
     # create array storing dictionaries containing all product details
     product_arr = []

@@ -8,7 +8,7 @@ import json
 def get(search_element, max_product_count):
 
     # request web page and parse it
-    url = 'https://www.snapdeal.com/search?keyword=' + search_element
+    url = 'https://www.ebay.com/sch/i.html?_from=R40&_trksid=m570.l1313&_nkw=' + search_element
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -18,44 +18,41 @@ def get(search_element, max_product_count):
     product_link = []
 
     # get all product details
-    products = soup.find_all('img', class_='product-image')
 
-    # check for empty result set
+    products = soup.find_all('span', class_='s-item__price')
+
+    # check for empty response
     if 0 == len(products):
-        print('empty result set from snapdeal.com')
+        print('empty result set from ebay.com')
         exit()
 
+    # product price
     count = max_product_count
     for product in products:
         if 0 == count:
             break
-        # product names
-        product_names.append(product['title'])
-        # product images
-        try:
-            temp = product['src']
-            product_images.append(temp)
-        except:
-            product_images.append(product['data-src'])
+        product_price.append(
+            str(product.get_text()).strip().replace(',', '')[4:-3])
         count -= 1
 
-    # product links
-    products = soup.find_all('div', class_='product-tuple-image')
+    products = soup.find_all('img', class_='s-item__image-img')
     count = max_product_count
     for product in products:
         if 0 == count:
             break
-        product_link.append(product.find('a')['href'])
+        # product name
+        product_names.append(product['alt'])
+        # product image
+        product_images.append(product['src'])
         count -= 1
 
-    # product prices
-    products = soup.find_all('div', class_='lfloat marR10')
+    # product link
+    products = soup.find_all('a', class_='s-item__link')
     count = max_product_count
     for product in products:
         if 0 == count:
             break
-        product_price.append(product.find(
-            'span', class_='lfloat product-price')['display-price'])
+        product_link.append(product['href'])
         count -= 1
 
     # create array storing dictionaries containing all product details
@@ -69,5 +66,5 @@ def get(search_element, max_product_count):
         })
 
     # store this object into a local JSON file
-    with open('json/snapdeal.json', 'w') as file:
+    with open('json/ebay.json', 'w') as file:
         json.dump(product_arr, file)
